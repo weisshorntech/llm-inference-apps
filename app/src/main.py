@@ -1,7 +1,6 @@
 import os
 
 import openai
-import uvicorn
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -12,7 +11,7 @@ from prompts.mountains import HEIGHT
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
 app = FastAPI()
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory="app/src/templates")
 app.mount("/static", StaticFiles(directory="app/src/static"), name="static")
 
 
@@ -22,7 +21,7 @@ def index(request: Request):
 
 
 @app.post("/", response_class=HTMLResponse)
-async def index(request: Request, prompt: str = Form(...)):
+async def completion(request: Request, prompt: str = Form(...)):
     response = davinci_completion(prompt=generate_prompt(prompt))
     result = response.choices[0].text
     return templates.TemplateResponse(
@@ -34,5 +33,5 @@ def generate_prompt(prompt):
     return HEIGHT.format(prompt.capitalize())
 
 
-if __name__ == "__main__":
-    uvicorn.run("main:app", host="127.0.0.1", port=5001, reload=True)
+# if __name__ == "__main__":
+#     uvicorn.run("main:app", host="127.0.0.1", port=5001, reload=True)

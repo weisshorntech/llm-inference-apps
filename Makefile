@@ -38,7 +38,7 @@ build-pypi:
 
 .PHONY: run-app
 run-app:
-	uvicorn --app-dir=app/src main:app --host 127.0.0.1 # --port $PORT
+	uvicorn --app-dir=app/src main:app --host 127.0.0.1 --port 5001 
 
 # Docker
 .PHONY: docker
