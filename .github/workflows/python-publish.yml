@@ -1,39 +1,82 @@
-# This workflow will upload a Python Package using Twine when a release is created
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#publishing-to-package-registries
-
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-name: Upload Python Package
+name: Test, Docker Image CI & Deploy To Cloud
 
 on:
-  release:
-    types: [published]
+  push:
+    branches: [ "dev", "main" ]
+  pull_request:
+    branches: [ "dev", "main" ]
 
-permissions:
-  contents: read
+env: 
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+  LIB_NAME: ${{ secrets.LIB_NAME }}
+  APP_NAME: app
+  VERSION: latest
+  
 
 jobs:
-  deploy:
-
+  test:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python
+    - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
-        python-version: '3.x'
+        python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install build
-    - name: Build package
-      run: python -m build
-    - name: Publish package
-      uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
-      with:
-        user: __token__
-        password: ${{ secrets.PYPI_API_TOKEN }}
+        make install
+    - name: Format the code with black
+      run: |
+        make format
+    - name: Analysing the code with pylint
+      run: |
+        make lint
+    - name: Testing python with pytest
+      run: |
+        make testing
+  
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the pypi python image
+      run: make build-pypi
+    - name: Set environment var needed for Docker
+      run: |
+          echo "IMAGE_BACKEND=registry.heroku.com/UPDATEME/web" >> $GITHUB_ENV 
+          
+    - name: Build the Docker images
+      
+      run: |
+          export IMAGE_BACKEND=${{ env.IMAGE_BACKEND }}
+          export VERSION=$VERSION
+          # docker-compose build
+          make docker APP=${{ env.APP_NAME }} IMAGE=${{ env.IMAGE_BACKEND }} VERSION=$VERSION
+      
+    #- name: Login to Heroku Container registry
+    #  run: heroku container:login
+      
+    #- name: Build and push
+    #  # run: heroku container:push -a $HEROKU_APP_NAME web
+    #  # run: docker push ${{ env.IMAGE }}:$VERSION
+    #  run: | 
+    #    docker push ${{ env.IMAGE_BACKEND }}:$VERSION
+    #    docker push ${{ env.IMAGE_FRONTEND }}:$VERSION
+      
+  #deploy:
+  #  needs: ["test", "build"]
+  #  runs-on: ubuntu-latest
+    
+  #  steps:
+  #  - uses: actions/checkout@v3
+  #  - name: Release
+  #    # run: heroku container:release -a $HEROKU_APP_NAME web
+  #    run: |
+  #      heroku container:release -a $HEROKU_BACKEND_NAME web
+  #      heroku container:release -a $HEROKU_FRONTEND_NAME web
+      
