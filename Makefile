@@ -5,8 +5,9 @@ APP := app
 
 install:
 	pip install --upgrade pip
+	pip install -r requirements-test.txt
 	pip install -r ${APP}/requirements.txt
-	# pip install -r producer/requirements.txt
+
 		
 
 lint:
