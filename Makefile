@@ -1,3 +1,4 @@
+
 IMAGE := llm-inference-apps
 VERSION := latest
 APP := app
@@ -44,7 +45,8 @@ run-app:
 .PHONY: docker
 docker:
 	@echo Building docker $(IMAGE):$(VERSION) ...
-	docker build -t $(IMAGE):$(VERSION) . \
+	docker build --build-arg OPENAI_API_KEY=$(OPENAI_API_KEY) \
+		-t $(IMAGE):$(VERSION) . \
 		-f ./${APP}/Dockerfile \
 
 .PHONY: clean_docker
