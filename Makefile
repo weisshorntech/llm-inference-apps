@@ -8,8 +8,6 @@ install:
 	pip install -r requirements-test.txt
 	pip install -r ${APP}/requirements.txt
 
-		
-
 lint:
 	pylint --disable=C,E0611,R0903,E1136,W1203 $$(git ls-files '*.py')
 
