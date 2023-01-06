@@ -1,0 +1,20 @@
+version: "2"
+
+services:    
+    oai-app:
+        image: $IMAGE:$VERSION
+        #depends_on:
+        #        - fastapi-app
+        environment:
+                - PORT=8000
+        build:
+            context: .
+            dockerfile: ./app/Dockerfile
+          
+    # fastapi-app:
+    #     image: $IMAGE:$VERSION
+    #     environment: 
+    #             - PORT=8005
+    #     build:
+    #         context: .
+    #         dockerfile: ./producer/Dockerfile

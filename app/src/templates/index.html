@@ -4,16 +4,16 @@
     <title>OpenAI Quickstart</title>
     <link
       rel="shortcut icon"
-      href="{{ url_for('static', path='/dog.png') }}"
+      href="{{ url_for('static', path='/mountain.png') }}"
     />
     <link rel="stylesheet" href="{{ url_for('static', path='/main.css') }}" />
   </head>
   <body>
-    <img src="{{ url_for('static', path='/dog.png') }}" class="icon" />
-    <h3>Name my pet</h3>
+    <img src="{{ url_for('static', path='/mountain.png') }}" class="icon" />
+    <h3>Get Mountains</h3>
     <form action="/" method="post">
-      <input type="text" name="animal" placeholder="Enter an animal" autocomplete="off" required />
-      <input type="submit" value="Generate names" />
+      <input type="text" name="prompt" placeholder="Enter a prompt" autocomplete="off" required />
+      <input type="submit" value="Lookup mountains" />
     </form>
     {% if result %}
     <div class="result">{{ result }}</div>
