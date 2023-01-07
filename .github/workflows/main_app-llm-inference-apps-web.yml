@@ -34,19 +34,19 @@ jobs:
           tags: weisshornregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_cb6b1b258b1840238c12e06146b59646 }}/llm-inference-apps-web:${{ github.sha }}
           file: ./Dockerfile
 
-    deploy:
-      runs-on: ubuntu-latest
-      needs: build
-      environment:
-        name: 'production'
-        url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
-      steps:
-        - name: Deploy to Azure Web App
-          id: deploy-to-webapp
-          uses: azure/webapps-deploy@v2
-          with:
-            app-name: 'app-llm-inference-apps-web'
-            slot-name: 'production'
-            publish-profile: ${{ secrets.AzureAppService_PublishProfile_f0171245d97847eb90fdf0b134900d33 }}
-            images: 'weisshornregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_cb6b1b258b1840238c12e06146b59646 }}/llm-inference-apps-web:${{ github.sha }}'
+    steps:
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'app-llm-inference-apps-web'
+          slot-name: 'production'
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile_f0171245d97847eb90fdf0b134900d33 }}
+          images: 'weisshornregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_cb6b1b258b1840238c12e06146b59646 }}/llm-inference-apps-web:${{ github.sha }}'
