@@ -8,8 +8,8 @@ on:
 
 env: 
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-  REPO_NAME: ${{ github.repository }}
-
+  REPO_NAME: ${{ secrets.REPO_NAME }}
+  
   APP_NAME: app
   APP_TYPE: web
 
@@ -76,25 +76,9 @@ jobs:
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-        
+
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
-        app-name: ${{ env.APP_NAME }}-${{ env.APP_TYPE }}
+        app-name: ${{ env.REPO_NAME }}-${{ env.APP_TYPE }}
         package: '${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:latest'      
-
-
-  # deploy:
-  #   needs: ["test", "build"]
-  #   runs-on: ubuntu-latest
-    
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #   - name: Release
-  #     # run: heroku container:release -a $HEROKU_APP_NAME web
-  #     run: |
-  #       az webapp create --resource-group my-resource-group --plan my-appservice-plan --name ${{ env.APP_NAME }} --deployment-container-image-name ${{ secrets.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.LIB_NAME }}:$VERSION
-
-  #       heroku container:release -a $HEROKU_BACKEND_NAME web
-  #       heroku container:release -a $HEROKU_FRONTEND_NAME web
-
