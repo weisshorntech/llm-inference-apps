@@ -46,7 +46,8 @@ docker:
 	@echo Building docker $(IMAGE):$(VERSION) ...
 	docker build --build-arg OPENAI_API_KEY=$(OPENAI_API_KEY) \
 		-t $(IMAGE):$(VERSION) . \
-		-f ./${APP}/Dockerfile \
+		-f ./${APP}/Dockerfile
+
 
 .PHONY: clean_docker
 clean_docker:
