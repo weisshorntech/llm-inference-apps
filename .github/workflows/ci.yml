@@ -65,11 +65,9 @@ jobs:
       run: |
         az acr login --name ${{ env.ACR_DOCKERREGISTRY }}
         REGISTRY_TOKEN=$(az acr login --name  ${{ env.ACR_DOCKERREGISTRY }} --expose-token --output tsv --query accessToken)
-        echo $REGISTRY_TOKEN >> $GITHUB_ENV
       
     - name: Build and push
       run: | 
-        export REGISTRY_TOKEN=${{ env.REGISTRY_TOKEN }}
         docker login ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io -u 00000000-0000-0000-0000-000000000000 -p "$REGISTRY_TOKEN"
         docker tag ${{ env.REPO_NAME }}-${{ env.APP_TYPE}} ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
         docker push ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
