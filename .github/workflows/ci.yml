@@ -49,8 +49,7 @@ jobs:
           
     - name: Build the Docker images
       run: |
-          export VERSION=$VERSION
-          make docker APP=${{ env.APP_NAME }} IMAGE=${{ secrets.ACR_NAME }}.azurecr.io/${{ env.LIB_NAME }} VERSION=$VERSION
+          make docker APP=${{ env.APP_NAME }} IMAGE=${{ secrets.ACR_NAME }}.azurecr.io/${{ env.LIB_NAME }} VERSION=$${{ env.VERSION }}
       
     - uses: azure/login@v1
       with:
