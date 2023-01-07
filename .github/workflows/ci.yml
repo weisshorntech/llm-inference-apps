@@ -52,11 +52,13 @@ jobs:
           export VERSION=$VERSION
           make docker APP=${{ env.APP_NAME }} IMAGE=${{ env.LIB_NAME }} VERSION=$VERSION
       
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Login to Azure Container registry
       run: |
-        az login
-        az acr login --name ${{ secrets.ACR_NAME }}
+        az acr login --name ${{ secrets.ACR_NAME }} --expose-token
       
     - name: Build and push
       # run: heroku container:push -a $HEROKU_APP_NAME web
@@ -65,6 +67,7 @@ jobs:
         docker push ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.LIB_NAME }}:$VERSION
       
   deploy:
+    
     permissions:
       contents: none
     runs-on: ubuntu-latest
@@ -72,18 +75,24 @@ jobs:
     environment:
       name: 'Development'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
     steps:
-      - name: Lowercase the repo name and username
-        run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+    - uses: actions/checkout@v3
+    - name: Retrieve the token
+      run: |
+        TOKEN=$(az acr login --name weisshorn --expose-token --output tsv --query accessToken)
 
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          images: 'ghcr.io/${{ env.REPO }}:${{ github.sha }}'
+    - name: 'Deploy to Azure Container Instances'
+      uses: 'azure/aci-deploy@v1'
+      with:
+        resource-group: my-resource-group
+        dns-name-label: url-for-container
+        image: ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.LIB_NAME }}:$VERSION
+        cpu: 1   #Optional
+        memory: 0.1   #Optional
+        registry-username: 00000000-0000-0000-0000-000000000000
+        registry-password: $TOKEN
+        name: ${{ secrets.ACR_NAME }}-container
+        location: 'switzerland north'
 
   # deploy:
   #   needs: ["test", "build"]
