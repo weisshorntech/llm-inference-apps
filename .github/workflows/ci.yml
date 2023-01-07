@@ -66,36 +66,9 @@ jobs:
       # run: heroku container:push -a $HEROKU_APP_NAME web
       # run: docker push ${{ env.IMAGE }}:$VERSION
       run: | 
-        # docker login ${{ secrets.ACR_NAME }}.azurecr.io --username 00000000-0000-0000-0000-000000000000 --password $TOKEN
         docker push ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.LIB_NAME }}:$VERSION
       
-  deploy:
-    
-    permissions:
-      contents: none
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'Development'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    steps:
-    - uses: actions/checkout@v3
-    - name: Retrieve the token
-      run: |
-        TOKEN=$(az acr login --name  ${{ secrets.ACR_NAME }} --expose-token --output tsv --query accessToken)
 
-    - name: 'Deploy to Azure Container Instances'
-      uses: 'azure/aci-deploy@v1'
-      with:
-        resource-group: my-resource-group
-        dns-name-label: url-for-container
-        image: ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.LIB_NAME }}:$VERSION
-        cpu: 1   #Optional
-        memory: 0.1   #Optional
-        registry-username: 00000000-0000-0000-0000-000000000000
-        registry-password: $TOKEN
-        name: ${{ secrets.ACR_NAME }}-container
-        location: 'switzerland north'
 
   # deploy:
   #   needs: ["test", "build"]
