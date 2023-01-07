@@ -107,7 +107,7 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     - name: Processing
       run: |
-        az webapp config set --name ${{ env.REPO_NAME }}-${{ env.APP_TYPE}}  --resource-group "rg-resource-group-0003"" --windows-fx-version '"DOCKER|${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:${{ env.VERSION }}"' --linux-fx-version '"DOCKER|${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:${{ env.VERSION }}"'
+        az webapp config set --name ${{ env.REPO_NAME }}-${{ env.APP_TYPE}}  --resource-group "rg-resource-group-0003" --windows-fx-version '"DOCKER|${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:${{ env.VERSION }}"' --linux-fx-version '"DOCKER|${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:${{ env.VERSION }}"'
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
