@@ -65,11 +65,10 @@ jobs:
       run: |
         az acr login --name ${{ env.ACR_DOCKERREGISTRY }}
         TOKEN=$(az acr login --name  ${{ env.ACR_DOCKERREGISTRY }} --expose-token --output tsv --query accessToken)
-        echbo $TOKEN
       
     - name: Build and push
       run: | 
-        docker login ${{ env.ACR_DOCKERREGISTRY }} -u 00000000-0000-0000-0000-000000000000 -p $TOKEN
+        docker login ${{ env.ACR_DOCKERREGISTRY }} -u 00000000-0000-0000-0000-000000000000 -p $(az acr login --name  ${{ env.ACR_DOCKERREGISTRY }} --expose-token --output tsv --query accessToken)
         docker tag ${{ env.REPO_NAME }}-${{ env.APP_TYPE}} ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
         docker push ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
 
