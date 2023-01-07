@@ -60,17 +60,15 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    # - uses: actions/checkout@v3
-    # - name: Login to Azure Container registry
-    #   run: |
-    #     az acr login --name ${{ env.ACR_DOCKERREGISTRY }}
-    #     # TOKEN=$(az acr login --name  ${{ env.ACR_DOCKERREGISTRY }} --expose-token --output tsv --query accessToken)
+    - uses: actions/checkout@v3
+    - name: Login to Azure Container registry
+      run: |
+        az acr login --name ${{ env.ACR_DOCKERREGISTRY }}
+        TOKEN=$(az acr login --name  ${{ env.ACR_DOCKERREGISTRY }} --expose-token --output tsv --query accessToken)
       
     - name: Build and push
-      # run: heroku container:push -a $HEROKU_APP_NAME web
-      # run: docker push ${{ env.IMAGE }}:$VERSION
       run: | 
-        docker login ${{ env.ACR_DOCKERREGISTRY }}
+        docker login ${{ env.ACR_DOCKERREGISTRY }} -u 00000000-0000-0000-0000-000000000000 -p $TOKEN
         docker tag ${{ env.REPO_NAME }}-${{ env.APP_TYPE}} ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
         docker push ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
 
