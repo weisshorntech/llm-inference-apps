@@ -57,6 +57,7 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Login to Azure Container registry
+    - uses: actions/checkout@v3
       run: |
         az acr login --name ${{ secrets.ACR_NAME }} --expose-token
         TOKEN=$(az acr login --name  ${{ secrets.ACR_NAME }} --expose-token --output tsv --query accessToken)
