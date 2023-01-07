@@ -64,7 +64,6 @@ jobs:
         heroku container:login
         docker tag ${{ env.REPO_NAME }}-${{ env.APP_TYPE}} registry.heroku.com/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
         docker push registry.heroku.com/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
-        heroku container:push -a registry.heroku.com/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION web
 
 
     - uses: azure/login@v1
