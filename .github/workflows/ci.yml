@@ -70,6 +70,7 @@ jobs:
       # run: heroku container:push -a $HEROKU_APP_NAME web
       # run: docker push ${{ env.IMAGE }}:$VERSION
       run: | 
+        docker login ${{ env.ACR_DOCKERREGISTRY }}
         docker tag ${{ env.REPO_NAME }}-${{ env.APP_TYPE}} ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
         docker push ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
 
