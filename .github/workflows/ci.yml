@@ -62,8 +62,8 @@ jobs:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       run: | 
         heroku container:login
-        docker tag ${{ env.REPO_NAME }}-${{ env.APP_TYPE}} registry.heroku.com/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}/web:$VERSION
-        docker push registry.heroku.com/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}/web:$VERSION
+        docker tag ${{ env.REPO_NAME }}-${{ env.APP_TYPE}} registry.heroku.com/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
+        docker push registry.heroku.com/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
 
 
     - uses: azure/login@v1
