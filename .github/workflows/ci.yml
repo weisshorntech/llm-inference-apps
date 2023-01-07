@@ -65,6 +65,7 @@ jobs:
       run: |
         az acr login --name ${{ env.ACR_DOCKERREGISTRY }}
         TOKEN=$(az acr login --name  ${{ env.ACR_DOCKERREGISTRY }} --expose-token --output tsv --query accessToken)
+        echbo $TOKEN
       
     - name: Build and push
       run: | 
