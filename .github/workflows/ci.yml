@@ -57,6 +57,8 @@ jobs:
           make docker APP=${{ env.APP_NAME }} IMAGE=${{ env.REPO_NAME }}-${{ env.APP_TYPE}} VERSION=${{ env.VERSION }}
 
     - name: Login to Heroku Container registry
+      env: 
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       run: | 
         heroku container:login
         docker tag ${{ env.REPO_NAME }}-${{ env.APP_TYPE}} registry.heroku.com/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
@@ -75,7 +77,7 @@ jobs:
         docker push ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
 
 
-  deploy:
+  deploy-heroku:
     needs: ["test", "build"]
     runs-on: ubuntu-latest
     
