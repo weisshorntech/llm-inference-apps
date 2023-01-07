@@ -61,6 +61,7 @@ jobs:
       run: |
         az acr login --name ${{ secrets.ACR_NAME }} --expose-token
         TOKEN=$(az acr login --name  ${{ secrets.ACR_NAME }} --expose-token --output tsv --query accessToken)
+        echo $TOKEN
       
     - name: Build and push
       # run: heroku container:push -a $HEROKU_APP_NAME web
