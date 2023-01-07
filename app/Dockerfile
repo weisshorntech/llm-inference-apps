@@ -23,4 +23,4 @@ RUN  . ./venv/bin/activate && pip install llm-inference-apps-0.0.0.1.tar.gz --up
 COPY ./ .
 # CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
 EXPOSE 80
-CMD  . ./venv/bin/activate && uvicorn --app-dir=app/src main:app --host 0.0.0.0 --port 80
+CMD  . ./venv/bin/activate && uvicorn --app-dir=app/src app.src.main:app --host 0.0.0.0 --port 80
