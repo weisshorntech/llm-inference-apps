@@ -30,9 +30,6 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
-    - name:
-      run: |
-        echo ${{ env.REPO_NAME }}}
     - name: Install dependencies
       run: |
         make install
@@ -63,11 +60,11 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - uses: actions/checkout@v3
-    - name: Login to Azure Container registry
-      run: |
-        az acr login --name ${{ env.ACR_DOCKERREGISTRY }}
-        # TOKEN=$(az acr login --name  ${{ env.ACR_DOCKERREGISTRY }} --expose-token --output tsv --query accessToken)
+    # - uses: actions/checkout@v3
+    # - name: Login to Azure Container registry
+    #   run: |
+    #     az acr login --name ${{ env.ACR_DOCKERREGISTRY }}
+    #     # TOKEN=$(az acr login --name  ${{ env.ACR_DOCKERREGISTRY }} --expose-token --output tsv --query accessToken)
       
     - name: Build and push
       # run: heroku container:push -a $HEROKU_APP_NAME web
