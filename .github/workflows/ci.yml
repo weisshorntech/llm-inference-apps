@@ -114,8 +114,9 @@ jobs:
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         images: ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:${{ env.VERSION }}'
 
+
   deploy-azure-to-production:
-    needs: ["test", "build"]
+    needs: deploy-azure-to-staging
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
     environment:
