@@ -29,7 +29,7 @@ jobs:
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
-        python-version: ${{ matrix.python-version }}
+
     - name: Install dependencies
       run: |
         make install
@@ -81,4 +81,5 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.APP_NAME}}-${{ env.REPO_NAME }}-${{ env.APP_TYPE }}
-        package: '${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:latest'      
+        images: ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:${{ env.VERSION }}    
+        
