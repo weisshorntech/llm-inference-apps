@@ -55,13 +55,20 @@ jobs:
     - name: Build the Docker images
       run: |
           make docker APP=${{ env.APP_NAME }} IMAGE=${{ env.REPO_NAME }}-${{ env.APP_TYPE}} VERSION=${{ env.VERSION }}
-      
+
+    - name: Login to Heroku Container registry
+      run: | 
+        heroku container:login
+        docker tag ${{ env.REPO_NAME }}-${{ env.APP_TYPE}} registry.heroku.com/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
+        docker push registry.heroku.com/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
+
+
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - uses: actions/checkout@v3
-    - name: Login to Azure Container registry and push the image
+    - name: Login to Azure Container registry and push the imagei
       run: |
         az acr login --name ${{ env.ACR_DOCKERREGISTRY }}
         docker tag ${{ env.REPO_NAME }}-${{ env.APP_TYPE}} ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
@@ -69,6 +76,18 @@ jobs:
 
 
   deploy:
+    needs: ["test", "build"]
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    - name: Release
+      run: |
+        heroku container:release -a ${{ env.REPO_NAME }}-${{ env.APP_TYPE}} web
+       
+      
+
+  deploy-azure:
     needs: ["test", "build"]
     runs-on: ubuntu-latest
 
