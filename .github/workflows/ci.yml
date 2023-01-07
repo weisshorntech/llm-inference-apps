@@ -69,7 +69,8 @@ jobs:
       
     - name: Build and push
       run: | 
-        docker login ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io -u 00000000-0000-0000-0000-000000000000 -p ${{ env.REGISTRY_TOKEN }}
+        export REGISTRY_TOKEN=${{ env.REGISTRY_TOKEN }}
+        docker login ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io -u 00000000-0000-0000-0000-000000000000 -p $REGISTRY_TOKEN
         docker tag ${{ env.REPO_NAME }}-${{ env.APP_TYPE}} ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
         docker push ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
 
