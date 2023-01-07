@@ -105,6 +105,9 @@ jobs:
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Processing
+      run: |
+        az webapp config set --name ${{ env.REPO_NAME }}-${{ env.APP_TYPE}}  --resource-group "rg-resource-group-0003"" --windows-fx-version '"DOCKER|${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:${{ env.VERSION }}"' --linux-fx-version '"DOCKER|${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:${{ env.VERSION }}"'
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
@@ -113,10 +116,7 @@ jobs:
         # slot-name: 'development'
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         images: ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:${{ env.VERSION }}'
-    - name: Post processing
-      run: |
-        az webapp config set --name ${{ env.REPO_NAME }}-${{ env.APP_TYPE}}  --resource-group "rg-resource-group-0003"" --windows-fx-version '"DOCKER|${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:${{ env.VERSION }}"' --linux-fx-version '"DOCKER|${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:${{ env.VERSION }}"'
-
+   
 
   deploy-azure-to-production:
     needs: deploy-azure-to-staging
