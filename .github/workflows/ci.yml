@@ -3,7 +3,7 @@ name: Test, Docker Image CI & Deploy To Cloud
 on:
   push:
     branches:
-      - dev
+      - main
   pull_request:
     branches:
       - main
@@ -122,7 +122,7 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
   
-  
+
     steps:
     - uses: azure/login@v1
       with:
