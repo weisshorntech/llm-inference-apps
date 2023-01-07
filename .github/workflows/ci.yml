@@ -64,12 +64,6 @@ jobs:
     - name: Login to Azure Container registry
       run: |
         az acr login --name ${{ env.ACR_DOCKERREGISTRY }}
-        REGISTRY_TOKEN=$(az acr login --name  ${{ env.ACR_DOCKERREGISTRY }} --expose-token --output tsv --query accessToken)
-        
-      
-    - name: Build and push
-      run: | 
-        docker login ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io -u 00000000-0000-0000-0000-000000000000 -p "$REGISTRY_TOKEN"
         docker tag ${{ env.REPO_NAME }}-${{ env.APP_TYPE}} ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
         docker push ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
 
@@ -82,7 +76,7 @@ jobs:
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
-        app-name: mywebapp
+        app-name: ${{ env.APP_NAME }}-${{ env.APP_TYPE }}
         package: '${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:latest'      
 
 
