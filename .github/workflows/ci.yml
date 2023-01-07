@@ -61,7 +61,7 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - uses: actions/checkout@v3
-    - name: Login to Azure Container registry
+    - name: Login to Azure Container registry and push the image
       run: |
         az acr login --name ${{ env.ACR_DOCKERREGISTRY }}
         docker tag ${{ env.REPO_NAME }}-${{ env.APP_TYPE}} ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION

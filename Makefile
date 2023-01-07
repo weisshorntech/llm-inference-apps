@@ -44,7 +44,7 @@ run-app:
 .PHONY: docker
 docker:
 	@echo Building docker $(IMAGE):$(VERSION) ...
-	docker build --platform linux/amd64 --build-arg OPENAI_API_KEY=$(OPENAI_API_KEY) \
+	docker build --build-arg OPENAI_API_KEY=$(OPENAI_API_KEY) \
 		-t $(IMAGE):$(VERSION) . \
 		-f ./${APP}/Dockerfile
 
