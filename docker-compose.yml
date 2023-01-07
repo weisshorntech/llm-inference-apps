@@ -2,7 +2,8 @@ version: "2"
 
 services:    
     oai-app:
-        image: $IMAGE:$VERSION
+        #image: $IMAGE:$VERSION
+        image: llm-inference-apps:latest
         #depends_on:
         #        - fastapi-app
         environment:

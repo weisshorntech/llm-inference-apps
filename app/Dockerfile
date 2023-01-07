@@ -16,11 +16,15 @@ RUN . ./venv/bin/activate && python3 -m pip install --upgrade pip
 
 COPY app/requirements.txt ./requirements.txt
 RUN . ./venv/bin/activate && pip install -r requirements.txt
+ENV PYTHONPATH=.
 
 COPY ./dist/llm-inference-apps-0.0.0.1.tar.gz ./llm-inference-apps-0.0.0.1.tar.gz
 RUN  . ./venv/bin/activate && pip install llm-inference-apps-0.0.0.1.tar.gz --upgrade
 
+RUN ls
+
 COPY ./ .
-# CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+
 EXPOSE 80
-CMD  . ./venv/bin/activate && uvicorn --app-dir=app/src app.src.main:app --host 0.0.0.0 --port 80
+#CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD  . ./venv/bin/activate && uvicorn --app-dir=app/src main:app --host 0.0.0.0 --port 80
