@@ -57,7 +57,7 @@ jobs:
           
     - name: Build the Docker images
       run: |
-          make docker APP=${{ env.APP_NAME }} IMAGE=${{ env.REP_NAME }}-${{ env.APP_TYPE}} VERSION=${{ env.VERSION }}
+          make docker APP=${{ env.APP_NAME }} IMAGE=${{ env.REPO_NAME }}-${{ env.APP_TYPE}} VERSION=${{ env.VERSION }}
       
     - uses: azure/login@v1
       with:
@@ -73,7 +73,7 @@ jobs:
       # run: heroku container:push -a $HEROKU_APP_NAME web
       # run: docker push ${{ env.IMAGE }}:$VERSION
       run: | 
-        docker push ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REP_NAME }}-${{ env.APP_TYPE}}:$VERSION
+        docker push ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
   deploy:
     needs: ["test", "build"]
     runs-on: ubuntu-latest
@@ -83,7 +83,7 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: mywebapp
-        package: '${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REP_NAME }}-${{ env.APP_TYPE}}:latest'      
+        package: '${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:latest'      
 
 
   # deploy:
