@@ -8,6 +8,7 @@ on:
 
 env: 
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+  HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
   REPO_NAME: ${{ secrets.REPO_NAME }}
   
   APP_NAME: app
