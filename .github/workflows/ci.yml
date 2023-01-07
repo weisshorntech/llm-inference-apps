@@ -3,7 +3,7 @@ name: Test, Docker Image CI & Deploy To Cloud
 on:
   push:
     branches:
-      - main
+      - dev
   pull_request:
     branches:
       - main
