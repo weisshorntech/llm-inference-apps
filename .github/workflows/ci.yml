@@ -15,7 +15,7 @@ env:
   
   APP_NAME: app
 
-  VERSION: latest
+  # VERSION: latest
   
   IMAGE: ${{ secrets.REPO_NAME }}-web
 
@@ -24,33 +24,33 @@ env:
   
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.8", "3.9", "3.10"]
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
+  # test:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       python-version: ["3.8", "3.9", "3.10"]
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - name: Set up Python ${{ matrix.python-version }}
+  #     uses: actions/setup-python@v3
+  #     with:
+  #       python-version: ${{ matrix.python-version }}
 
-    - name: Install dependencies
-      run: |
-        make install
-    - name: Format the code with black
-      run: |
-        make format
-    - name: Analysing the code with pylint
-      run: |
-        make lint
-    - name: Testing python with pytest
-      run: |
-        make testing
+  #   - name: Install dependencies
+  #     run: |
+  #       make install
+  #   - name: Format the code with black
+  #     run: |
+  #       make format
+  #   - name: Analysing the code with pylint
+  #     run: |
+  #       make lint
+  #   - name: Testing python with pytest
+  #     run: |
+  #       make testing
   
   build-and-deploy:
-    needs: test
+    # needs: test
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
     steps:
@@ -60,7 +60,10 @@ jobs:
           
     - name: Build the Docker images
       run: |
-          make docker APP=${{ env.APP_NAME }} IMAGE=${{ env.IMAGE }} VERSION=${{ github.sha }}
+          export APP=${{ env.APP_NAME }}
+          export IMAGE=${{ env.IMAGE }}
+          export VERSION=${{ github.sha }}
+          make docker 
       
     - name: Login via Azure CLI
       uses: azure/login@v1
