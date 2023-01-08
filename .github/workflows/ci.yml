@@ -69,12 +69,12 @@ jobs:
         docker tag ${{ env.REPO_NAME }}-${{ env.APP_TYPE}} registry.heroku.com/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
         docker push registry.heroku.com/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
 
-    - name: Push Image to Github Container registry
-      env: 
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: | 
-        docker tag ${{ env.REPO_NAME }}-${{ env.APP_TYPE}} ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
-        docker push ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
+    # - name: Push Image to Github Container registry
+    #   env: 
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   run: | 
+    #     docker tag ${{ env.REPO_NAME }}-${{ env.APP_TYPE}} ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
+    #     docker push ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
 
     - uses: azure/login@v1
       with:
