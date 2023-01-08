@@ -81,7 +81,7 @@ jobs:
      
     - name: Push container image to registry 
       run: |
-        # docker build --build-arg OPENAI_API_KEY=${{ env.OPENAI_API_KEY }} . -t ${{ env.IMAGE }}:${{ github.sha }} -f ./${{ APP-NAME }}/Dockerfile
+        # docker build --build-arg OPENAI_API_KEY=${{ env.OPENAI_API_KEY }} . -t ${{ env.IMAGE }}:${{ github.sha }} -f ./${{ env.APP_NAME }}/Dockerfile
         # docker build . -t ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.IMAGE }}:${{ github.sha }}
         docker tag ${{ env.IMAGE }}:${{ github.sha }} ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.IMAGE }}:${{ github.sha }}
         docker push ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.IMAGE }}:${{ github.sha }}
