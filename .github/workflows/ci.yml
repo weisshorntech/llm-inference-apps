@@ -90,7 +90,7 @@ jobs:
     - name: Deploy to App Service
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'weisshorntech-${{ env.IMAGE }}'
+        app-name: '${{ env.APP_NAME }}-${{ env.IMAGE }}'
         images: '${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.IMAGE }}:${{ github.sha }}'
         slot-name: 'staging'
 
