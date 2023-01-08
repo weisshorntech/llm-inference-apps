@@ -23,4 +23,4 @@ RUN  pip install llm-inference-apps-0.0.0.1.tar.gz --upgrade
 COPY ./ .
 
 EXPOSE 8000
-CMD uvicorn --app-dir=app/src main:app --host 0.0.0.0 --port 8000
+CMD uvicorn --app-dir=app/src main:app --host 0.0.0.0 --port 8000 --log-level=debug
