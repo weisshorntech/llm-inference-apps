@@ -102,7 +102,6 @@ jobs:
     - name: Azure logout
       run: |
         az logout
-
    
 
   deploy-azure-to-production:
