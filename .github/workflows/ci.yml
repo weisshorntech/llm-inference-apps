@@ -76,9 +76,9 @@ jobs:
         password: ${{ secrets.REGISTRY_PASSWORD }}
      
      
-    - name: Build and push container image to registry 
+    - name: Push container image to registry 
       run: |
-        docker build . -t ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.IMAGE }}:${{ github.sha }}
+        # docker build . -t ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.IMAGE }}:${{ github.sha }}
         docker push ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.IMAGE }}:${{ github.sha }}
         
         
