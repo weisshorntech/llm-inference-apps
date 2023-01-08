@@ -63,5 +63,5 @@ input[type="submit"] {
 .result {
   font-weight: bold;
   margin-top: 40px;
-  white-space: pre-line;
+  white-space: pre-wrap;
 }
