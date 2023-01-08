@@ -1,8 +1,8 @@
 
 # IMAGE := llm-inference-apps
 APP := app
-# VERSION := latest
-# IMAGE:= test
+#VERSION := latest
+#IMAGE:= test
 
 install:
 	pip install --upgrade pip
