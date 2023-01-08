@@ -65,6 +65,15 @@ jobs:
           export VERSION=${{ github.sha }}
           make docker 
   
+     
+    
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    environment:
+      name: 'Development'
+
     - name: Login via Azure CLI
       uses: azure/login@v1
       with:
@@ -77,14 +86,7 @@ jobs:
         login-server: ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
-     
-    
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-    environment:
-      name: 'Development'
+        
     - name: Push container image to registry 
       run: |
         docker tag ${{ env.IMAGE }}:${{ github.sha }} ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.IMAGE }}:${{ github.sha }}
