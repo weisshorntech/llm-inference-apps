@@ -12,6 +12,7 @@ env:
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
   REPO_NAME: ${{ secrets.REPO_NAME }}
+  OWNER: ${{ github.repository_owner }}
   
   APP_NAME: app
   APP_TYPE: web
@@ -69,8 +70,8 @@ jobs:
 
     - name: Push Image to Github Container registry
       run: | 
-        docker tag ${{ env.REPO_NAME }}-${{ env.APP_TYPE}} ghcr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
-        docker push ghcr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
+        docker tag ${{ env.REPO_NAME }}-${{ env.APP_TYPE}} ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
+        docker push ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
 
     - uses: azure/login@v1
       with:
