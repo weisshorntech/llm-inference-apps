@@ -14,11 +14,10 @@ env:
   OWNER: ${{ github.repository_owner }}
   
   APP_NAME: app
-  APP_TYPE: web
 
   VERSION: latest
   
-  IMAGE: ${{ secrets.REPO_NAME }}-${{ env.APP_TYPE}}
+  IMAGE: ${{ secrets.REPO_NAME }}-web
 
   ACR_DOCKERREGISTRY: ${{ secrets.ACR_DOCKERREGISTRY }}
 
