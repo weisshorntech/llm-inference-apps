@@ -49,7 +49,7 @@ jobs:
       run: |
         make testing
   
-  build:
+  build-and-deploy:
     needs: test
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
@@ -79,6 +79,7 @@ jobs:
     - name: Push container image to registry 
       run: |
         # docker build . -t ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.IMAGE }}:${{ github.sha }}
+        docker tag ${{ env.IMAGE }} ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.IMAGE }}:${{ github.sha }}
         docker push ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.IMAGE }}:${{ github.sha }}
         
         
