@@ -60,7 +60,7 @@ jobs:
           
     - name: Build the Docker images
       run: |
-          make docker APP=${{ env.APP_NAME }} IMAGE=${{ IMAGE }} VERSION=${{ github.sha }}
+          make docker APP=${{ env.APP_NAME }} IMAGE=${{ env.IMAGE }} VERSION=${{ github.sha }}
       
     - name: Login via Azure CLI
       uses: azure/login@v1
