@@ -59,7 +59,7 @@ jobs:
       run: |
           make docker APP=${{ env.APP_NAME }} IMAGE=${{ env.REPO_NAME }}-${{ env.APP_TYPE}} VERSION=${{ env.VERSION }}
 
-    - name: Login to Heroku Container registry
+    - name: Login to Heroku Container registry and push the image
       env: 
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       run: | 
@@ -67,6 +67,10 @@ jobs:
         docker tag ${{ env.REPO_NAME }}-${{ env.APP_TYPE}} registry.heroku.com/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
         docker push registry.heroku.com/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
 
+    - name: Push Image to Github Container registry
+      run: | 
+        docker tag ${{ env.REPO_NAME }}-${{ env.APP_TYPE}} ghcr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
+        docker push ghcr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
 
     - uses: azure/login@v1
       with:
