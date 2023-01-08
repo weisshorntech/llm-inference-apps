@@ -14,9 +14,6 @@ env:
   OWNER: ${{ github.repository_owner }}
   
   APP_NAME: app
-
-  # VERSION: latest
-  
   IMAGE: ${{ secrets.REPO_NAME }}-web
 
   ACR_DOCKERREGISTRY: ${{ secrets.ACR_DOCKERREGISTRY }}
@@ -49,11 +46,11 @@ jobs:
   #     run: |
   #       make testing
   
-  build:
+  build-and-deploy-to-staging:
     # needs: test
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
-    
+
     steps:
     - uses: actions/checkout@main
     - name: Build the pypi python image
@@ -66,19 +63,10 @@ jobs:
           export VERSION=${{ github.sha }}
           make docker 
   
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-    environment:
-      name: 'Development'
-
-    steps:
     - name: Login via Azure CLI
       uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-        
+        creds: ${{ secrets.AZURE_CREDENTIALS }}      
         
     - name: Login to Azure Container Registry
       uses: azure/docker-login@v1
