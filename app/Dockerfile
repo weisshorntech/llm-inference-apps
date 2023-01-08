@@ -4,7 +4,7 @@ COPY ./app/src /app/src
 COPY ./app/src/main.py /app/src/main.py
 COPY ./app/requirements.txt /app/requirements.txt
 
-WORKDIR /
+WORKDIR /app
 
 
 ARG OPENAI_API_KEY
@@ -23,4 +23,4 @@ RUN  pip install llm-inference-apps-0.0.0.1.tar.gz --upgrade
 ENV PORT=8000
 EXPOSE 8000
 
-CMD uvicorn --app-dir=app/src main:app --host 0.0.0.0 --port $PORT --log-level=debug
+CMD uvicorn --app-dir=src main:app --host 0.0.0.0 --port $PORT --log-level=debug
