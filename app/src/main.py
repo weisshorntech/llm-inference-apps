@@ -11,8 +11,8 @@ from prompts.mountains import HEIGHT
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
 app = FastAPI()
-templates = Jinja2Templates(directory="app/src/templates")
-app.mount("/static", StaticFiles(directory="app/src/static"), name="static")
+templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @app.get("/", response_class=HTMLResponse)
