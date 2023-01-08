@@ -3,7 +3,7 @@ name: Test, Docker Image CI & Deploy To Cloud
 on:
   push:
     branches:
-      - main
+      - dev
   pull_request:
     branches:
       - main
@@ -12,6 +12,7 @@ env:
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
   REPO_NAME: ${{ secrets.REPO_NAME }}
+  OWNER: ${{ github.repository_owner }}
   
   APP_NAME: app
   APP_TYPE: web
@@ -33,6 +34,7 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
+
     - name: Install dependencies
       run: |
         make install
@@ -59,7 +61,7 @@ jobs:
       run: |
           make docker APP=${{ env.APP_NAME }} IMAGE=${{ env.REPO_NAME }}-${{ env.APP_TYPE}} VERSION=${{ env.VERSION }}
 
-    - name: Login to Heroku Container registry
+    - name: Login to Heroku Container registry and push the image
       env: 
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       run: | 
@@ -67,6 +69,12 @@ jobs:
         docker tag ${{ env.REPO_NAME }}-${{ env.APP_TYPE}} registry.heroku.com/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
         docker push registry.heroku.com/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
 
+    # - name: Push Image to Github Container registry
+    #   env: 
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   run: | 
+    #     docker tag ${{ env.REPO_NAME }}-${{ env.APP_TYPE}} ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
+    #     docker push ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
 
     - uses: azure/login@v1
       with:
@@ -113,9 +121,10 @@ jobs:
         # slot-name: 'development'
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         images: ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:${{ env.VERSION }}'
+   
 
   deploy-azure-to-production:
-    needs: ["test", "build"]
+    needs: deploy-azure-to-staging
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
     environment:
@@ -132,6 +141,6 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.APP_NAME}}-${{ env.REPO_NAME }}-${{ env.APP_TYPE }}
-        # slot-name: 'development'
+        slot-name: 'production'
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        images: ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:${{ env.VERSION }}'
+        images: ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:${{ env.VERSION }}
