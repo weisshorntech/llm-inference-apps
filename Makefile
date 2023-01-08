@@ -1,6 +1,5 @@
 
-IMAGE := llm-inference-apps
-VERSION := latest
+# IMAGE := llm-inference-apps
 APP := app
 
 install:
