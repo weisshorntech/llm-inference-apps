@@ -34,6 +34,10 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
+
+    - name: This
+      run: echo ${{ env.OWNER }}
+
     - name: Install dependencies
       run: |
         make install
