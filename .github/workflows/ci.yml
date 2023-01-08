@@ -117,10 +117,10 @@ jobs:
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
-        app-name: ${{ env.APP_NAME}}-${{ env.REPO_NAME }}-${{ env.APP_TYPE }}
-        # slot-name: 'development'
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        images: ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:${{ env.VERSION }}'
+        app-name: '${{ env.APP_NAME}}-${{ env.REPO_NAME }}-${{ env.APP_TYPE }}'
+        slot-name: 'staging'
+        publish-profile: '${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}'
+        images: '${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:${{ env.VERSION }}'
 
     - name: Azure logout
       run: |
@@ -146,7 +146,7 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: '${{ env.APP_NAME}}-${{ env.REPO_NAME }}-${{ env.APP_TYPE }}'
-        # slot-name: 'production'
+        slot-name: 'production'
         publish-profile: '${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}'
         images: '${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:${{ env.VERSION }}'
 
