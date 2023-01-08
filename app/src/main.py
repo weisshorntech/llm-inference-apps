@@ -5,19 +5,13 @@ from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from jinja2 import Environment, PackageLoader
-from inference.models.davinci import davinci_completion
-from inference.prompts.mountains import HEIGHT
-
-import re
+from src.inference.models.davinci import davinci_completion
+from src.inference.prompts.mountains import HEIGHT
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
 app = FastAPI()
-io = dict(
-    keep_trailing_newline=False
-
-)
+io = dict(keep_trailing_newline=False)
 templates = Jinja2Templates(directory="app/src/inference/templates", **io)
 app.mount("/static", StaticFiles(directory="app/src/inference/static"), name="static")
 

@@ -30,11 +30,22 @@ body {
   width: 34px;
 }
 h3 {
-  font-size: 32px;
-  line-height: 40px;
-  font-weight: bold;
-  color: #202123;
-  margin: 16px 0 40px;
+  font-family:'Times New Roman', sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 20px 0;
+}
+
+h3:before {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 2px;
+  background: #333;
+  margin: 10px 0;
 }
 form {
   display: flex;
