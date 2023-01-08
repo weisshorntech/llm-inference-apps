@@ -35,9 +35,6 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: This
-      run: echo ${{ env.OWNER }}
-
     - name: Install dependencies
       run: |
         make install
@@ -73,6 +70,8 @@ jobs:
         docker push registry.heroku.com/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
 
     - name: Push Image to Github Container registry
+      env: 
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: | 
         docker tag ${{ env.REPO_NAME }}-${{ env.APP_TYPE}} ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
         docker push ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}-${{ env.APP_TYPE}}:$VERSION
