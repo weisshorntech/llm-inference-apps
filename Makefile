@@ -1,8 +1,8 @@
 
 # IMAGE := llm-inference-apps
 APP := app
-#VERSION := latest
-#IMAGE:= test
+VERSION := latest
+IMAGE:= test
 
 install:
 	pip install --upgrade pip
@@ -39,7 +39,7 @@ build-pypi:
 
 .PHONY: run-app
 run-app:
-	uvicorn --app-dir=app/src main:app --host 127.0.0.1 --port 5001 
+	uvicorn --app-dir=app/src main:app --host 127.0.0.1 --port 5001 --reload
 
 # Docker
 .PHONY: docker
