@@ -65,8 +65,6 @@ jobs:
           export VERSION=${{ github.sha }}
           make docker 
   
-     
-    
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -86,7 +84,7 @@ jobs:
         login-server: ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
-        
+
     - name: Push container image to registry 
       run: |
         docker tag ${{ env.IMAGE }}:${{ github.sha }} ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.IMAGE }}:${{ github.sha }}
