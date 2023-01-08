@@ -1,9 +1,10 @@
 FROM python:3.9-slim
 
 COPY ./app/src /app/src
+COPY ./app/src/main.py /app/src/main.py
 COPY ./app/requirements.txt /app/requirements.txt
 
-WORKDIR /app
+WORKDIR /
 
 
 ARG OPENAI_API_KEY

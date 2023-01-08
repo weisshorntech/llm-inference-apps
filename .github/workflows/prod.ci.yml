@@ -1,10 +1,7 @@
-name: Test, Docker Image CI & Deploy To Cloud
+name: Deploy to Azure Production
 
 on:
   push:
-    branches:
-      - dev
-  pull_request:
     branches:
       - main
 
@@ -21,36 +18,38 @@ env:
   
 
 jobs:
-  # test:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       python-version: ["3.8", "3.9", "3.10"]
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #   - name: Set up Python ${{ matrix.python-version }}
-  #     uses: actions/setup-python@v3
-  #     with:
-  #       python-version: ${{ matrix.python-version }}
-
-  #   - name: Install dependencies
-  #     run: |
-  #       make install
-  #   - name: Format the code with black
-  #     run: |
-  #       make format
-  #   - name: Analysing the code with pylint
-  #     run: |
-  #       make lint
-  #   - name: Testing python with pytest
-  #     run: |
-  #       make testing
-  
-  build-and-deploy-to-staging:
-    # needs: test
+  test:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
 
+    - name: Install dependencies
+      run: |
+        make install
+    - name: Format the code with black
+      run: |
+        make format
+    - name: Analysing the code with pylint
+      run: |
+        make lint
+    - name: Testing python with pytest
+      run: |
+        make testing
+  
+  build-and-deploy-to-production:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
+    environment:
+      name: Production
+      url: https://${{ env.APP_NAME }}-${{ env.IMAGE }}.azurewebsites.net
     steps:
     - uses: actions/checkout@main
     - name: Build the pypi python image
@@ -60,7 +59,7 @@ jobs:
       run: |
           export APP=${{ env.APP_NAME }}
           export IMAGE=${{ env.IMAGE }}
-          export VERSION=${{ github.sha }}
+          export VERSION=latest
           make docker 
   
     - name: Login via Azure CLI
@@ -77,16 +76,16 @@ jobs:
 
     - name: Push container image to registry 
       run: |
-        docker tag ${{ env.IMAGE }}:${{ github.sha }} ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.IMAGE }}:${{ github.sha }}
-        docker push ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.IMAGE }}:${{ github.sha }}
+        docker tag ${{ env.IMAGE }}:latest ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.IMAGE }}:latest
+        docker push ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.IMAGE }}:latest
         
         
     - name: Deploy to App Service
       uses: azure/webapps-deploy@v2
       with:
         app-name: '${{ env.APP_NAME }}-${{ env.IMAGE }}'
-        images: '${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.IMAGE }}:${{ github.sha }}'
-        slot-name: 'staging'
+        images: '${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.IMAGE }}:latest'
+        slot-name: 'production'
 
     - name: Azure logout
       run: |
