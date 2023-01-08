@@ -53,6 +53,7 @@ jobs:
     # needs: test
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
+    
     steps:
     - uses: actions/checkout@main
     - name: Build the pypi python image
@@ -72,6 +73,7 @@ jobs:
     environment:
       name: 'Development'
 
+    steps:
     - name: Login via Azure CLI
       uses: azure/login@v1
       with:
