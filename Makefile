@@ -1,8 +1,8 @@
 
 # IMAGE := llm-inference-apps
 APP := app
-# VERSION := latest
-# IMAGE:= test
+VERSION := latest
+IMAGE:= test
 
 install:
 	pip install --upgrade pip
@@ -10,7 +10,7 @@ install:
 	pip install -r ${APP}/requirements.txt
 
 lint:
-	pylint --disable=C,E0611,R0903,E1136,W1203 $$(git ls-files '*.py')
+	pylint --disable=C,E0611,R0903,E1136,W1203,E0401 $$(git ls-files '*.py')
 
 format:
 	black $$(git ls-files '*.py')
@@ -39,7 +39,7 @@ build-pypi:
 
 .PHONY: run-app
 run-app:
-	uvicorn --app-dir=app main:app --host 127.0.0.1 --port 5001 --reload
+	uvicorn --app-dir=app/src main:app --host 127.0.0.1 --port 5001 --reload
 
 # Docker
 .PHONY: docker
