@@ -1,27 +1,31 @@
 FROM python:3.9-slim
 
-RUN useradd -d /home/docker_user -m -s /bin/bash docker_user
-USER docker_user
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libpq-dev \
+    python3-dev \
+    python3-pip \
+    python3-venv \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /home/docker_user/workspace
-WORKDIR /home/docker_user/workspace
+COPY ./app/src /app/src
 
-# WORKDIR /app
+WORKDIR /
+
 ARG OPENAI_API_KEY
-ENV PATH="${PATH}:/home/docker_user/.local/bin"
-ENV IS_DOCKERIZED true
 ENV OPENAI_API_KEY=$OPENAI_API_KEY
-RUN python3 -m venv ./venv
-RUN . ./venv/bin/activate && python3 -m pip install --upgrade pip
-
-COPY app/requirements.txt ./requirements.txt
-RUN . ./venv/bin/activate && pip install -r requirements.txt
 ENV PYTHONPATH=.
 
+RUN pip install --upgrade pip
+
+COPY app/requirements.txt ./requirements.txt
+RUN  pip install -r requirements.txt
+
 COPY ./dist/llm-inference-apps-0.0.0.1.tar.gz ./llm-inference-apps-0.0.0.1.tar.gz
-RUN  . ./venv/bin/activate && pip install llm-inference-apps-0.0.0.1.tar.gz --upgrade
+RUN  pip install llm-inference-apps-0.0.0.1.tar.gz --upgrade
 
-COPY ./ .
 
-EXPOSE 80
-CMD  . ./venv/bin/activate && uvicorn --app-dir=app/src main:app --host 0.0.0.0 --port 80
+ENV PORT=8000
+EXPOSE 8000
+
+CMD uvicorn --app-dir=app/src main:app --host 0.0.0.0 --port $PORT --log-level=debug
