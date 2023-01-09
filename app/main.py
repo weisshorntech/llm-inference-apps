@@ -5,8 +5,8 @@ from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from inference.models.davinci import davinci_completion
-from inference.prompts.mountains import HEIGHT
+from src.inference.models.davinci import davinci_completion
+from src.inference.prompts.mountains import HEIGHT
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
