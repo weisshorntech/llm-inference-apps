@@ -14,9 +14,9 @@ env:
   IMAGE: ${{ secrets.REPO_NAME }}-web
 
   ACR_DOCKERREGISTRY: ${{ secrets.ACR_DOCKERREGISTRY }}
-  MAJOR_VERSION: 0
-  MINOR_VERSION: 0
-  PATCH_VERSION: 1
+  MAJOR_VERSION: "0"
+  MINOR_VERSION: "0"
+  PATCH_VERSION: "1"
 
   
 
@@ -87,7 +87,7 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: '${{ env.APP_NAME }}-${{ env.IMAGE }}'
-        images: '${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.IMAGE }}:${{ env.MAJOR_VERSION }}:${{ env.MINOR_VERSION }}:${{ env.PATCH_VERSION }}'
+        images: '${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.IMAGE }}:${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}'
         slot-name: 'production'
 
     - name: Azure logout
