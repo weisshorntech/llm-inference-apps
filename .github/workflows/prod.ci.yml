@@ -79,8 +79,8 @@ jobs:
 
     - name: Push container image to registry 
       run: |
-        docker tag ${{ env.IMAGE }}:latest ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.IMAGE }}:${{ env.MAJOR_VERSION }}:${{ env.MINOR_VERSION }}:${{ env.PATCH_VERSION }}
-        docker push ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.IMAGE }}:${{ env.MAJOR_VERSION }}:${{ env.MINOR_VERSION }}:${{ env.PATCH_VERSION }}
+        docker tag ${{ env.IMAGE }}:latest ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.IMAGE }}:${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}
+        docker push ${{ env.ACR_DOCKERREGISTRY }}.azurecr.io/${{ env.IMAGE }}:${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}
         
         
     - name: Deploy to App Service
