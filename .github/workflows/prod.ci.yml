@@ -63,7 +63,7 @@ jobs:
           export APP=${{ env.APP_NAME }}
           export IMAGE=${{ env.IMAGE }}
           export VERSION=latest
-          export APP_VERSION=v${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }
+          export APP_VERSION=release-v${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }
           make docker 
   
     - name: Login via Azure CLI

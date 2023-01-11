@@ -20,7 +20,7 @@ body {
   background-blend-mode: multiply;
 
 }
-.banner {
+.dev-banner {
   position: fixed;
   top: 0;
   left: 0;
@@ -31,6 +31,12 @@ body {
   font-size: 1.em;
   text-align: center;
   z-index: 1;
+}
+.prod-banner {
+  background-color: green;
+}
+.unknown-banner {
+  background-color: gray;
 }
 .icon {
   margin-top: 50px;
