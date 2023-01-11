@@ -9,6 +9,13 @@
     <link rel="stylesheet" href="{{ url_for('static', path='/main.css') }}" />
   </head>
   <body>
+    {% if "dev" in version %}
+    <div class="dev-banner">LLM Inference Apps / env: {{ version }} </div>
+    {% elif "release-v" in version%}
+    <div class="dev-banner prod-banner">LLM Inference Apps / env: {{ version }} </div>
+    {% else %}
+    <div class="dev-banner unknown-banner">LLM Inference Apps / env: unknown </div>
+    {% endif %}
     <img src="{{ url_for('static', path='/mountain-icon.jpeg') }}" class="icon" />
     <h3>Get 10 highest mountains in a 100 km radius of the mountain you ask for</h3>
     <form action="/" method="post">
@@ -18,5 +25,6 @@
     {% if result %}
       <div class="result">{{ result }}</div>
     {% endif %}
+    
   </body>
 </html>

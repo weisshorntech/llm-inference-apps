@@ -8,6 +8,7 @@ from fastapi.templating import Jinja2Templates
 from inference.models.davinci import davinci_completion
 from inference.prompts.mountains import HEIGHT
 
+APP_VERSION = os.environ["APP_VERSION"]
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
 app = FastAPI()
@@ -18,7 +19,7 @@ app.mount("/static", StaticFiles(directory="app/src/inference/static"), name="st
 
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse("index.html", {"request": request, "version": APP_VERSION})
 
 
 @app.post("/", response_class=HTMLResponse)

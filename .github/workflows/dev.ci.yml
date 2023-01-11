@@ -62,6 +62,7 @@ jobs:
           export APP=${{ env.APP_NAME }}
           export IMAGE=${{ env.IMAGE }}
           export VERSION=${{ github.sha }}
+          export APP_VERSION=dev-${{ github.sha }}
           make docker 
   
     - name: Login via Azure CLI

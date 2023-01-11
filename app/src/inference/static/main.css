@@ -20,7 +20,26 @@ body {
   background-blend-mode: multiply;
 
 }
+.dev-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #FDB813; /* "nice yellow" */
+  color: white;
+  padding: 10px;
+  font-size: 1.em;
+  text-align: center;
+  z-index: 1;
+}
+.prod-banner {
+  background-color: green;
+}
+.unknown-banner {
+  background-color: gray;
+}
 .icon {
+  margin-top: 50px;
   width: 208px;
 }
 h3 {
